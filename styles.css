@@ -1,0 +1,35 @@
+/* Edit mode: the _ delimiter characters — hide them visually when NOT being edited */
+.markdown-source-view.is-live-preview
+	.cm-line:not(.cm-active)
+	.cm-underscore-mark {
+	font-style: normal;
+	opacity: 0;
+	pointer-events: none;
+	display: none;
+}
+
+/* Edit mode: ensure the _ delimiter characters themselves don't inherit emphasis colors when visible */
+.markdown-source-view.mod-cm6 .cm-underscore-mark {
+	color: var(--text-normal) !important;
+}
+
+/* Edit mode: the content between _ marks.
+   In Live Preview, Obsidian applies .cm-em which forces italic.
+   CM6 merges inline marks, so we target both nested and merged variants
+   with !important to beat Obsidian's native specificity. */
+.markdown-source-view.mod-cm6 .cm-underscore-underline,
+.markdown-source-view.mod-cm6 .cm-em.cm-underscore-underline,
+.markdown-source-view.mod-cm6 .cm-em:has(.cm-underscore-underline) {
+	font-style: normal !important;
+	text-decoration: underline !important;
+	color: var(--text-normal) !important;
+}
+
+/* Reading mode: <em> elements that came from _text_ */
+.markdown-rendered .underscore-em,
+.markdown-preview-view .underscore-em,
+.markdown-reading-view .underscore-em {
+	font-style: normal !important;
+	text-decoration: underline !important;
+	color: var(--text-normal) !important;
+}

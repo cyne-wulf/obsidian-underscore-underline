@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Underline Plugin Test Harness</title>
+  <style>
+    body { margin: 20px; font-family: sans-serif; }
+    .editor-wrap {
+      width: 220px;
+      border: 1px solid #ccc;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    /* Force CM6 editor to fill and not overflow the container */
+    .editor-wrap .cm-editor { width: 100%; }
+    .editor-wrap .cm-scroller { overflow-x: hidden; }
+    /* Force line-height so wrapping is measurable */
+    .cm-line { white-space: pre-wrap; word-break: break-word; }
+
+    /* ── Plugin styles (mirrors styles.css) ───────────────────────── */
+    .cm-underscore-mark {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .cm-underscore-underline {
+      font-style: normal;
+      text-decoration: underline;
+    }
+
+    /* ── Obsidian interference simulation ─────────────────────────── *
+     * Obsidian's own ViewPlugin wraps emphasis in .cm-em and sets
+     * text-decoration:none. In some Electron/Chrome versions this
+     * suppresses a child element's text-decoration:underline.
+     * We simulate this here so Playwright catches the regression.    */
+    .cm-em {
+      text-decoration: none;
+      font-style: italic;
+    }
+    /* Our fix: override cm-em when it contains our underline span */
+    .cm-em:has(.cm-underscore-underline) {
+      font-style: normal;
+      text-decoration: underline !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CM6 editors ──────────────────────────────────────────────────── -->
+  <div id="editor-short"  class="editor-wrap" data-testid="editor-short"></div>
+  <div id="editor-middle" class="editor-wrap" data-testid="editor-middle"></div>
+  <div id="editor-wrap"   class="editor-wrap" data-testid="editor-wrap"></div>
+
+  <!-- Static-DOM Obsidian interference test ────────────────────────── *
+   * Replicates the exact nesting CM6 produces in Obsidian Live Preview:
+   *   .cm-em (text-decoration:none) wraps .cm-underscore-underline.
+   * Without the :has() fix above, .cm-underscore-underline would NOT
+   * show an underline because the parent suppresses it.              -->
+  <div id="css-interference" data-testid="css-interference">
+    <span class="cm-em">
+      <span class="cm-underscore-mark">_</span
+      ><span class="cm-underscore-underline">underline despite cm-em suppression</span
+      ><span class="cm-underscore-mark">_</span>
+    </span>
+  </div>
+
+  <script src="harness-bundle.js"></script>
+</body>
+</html>

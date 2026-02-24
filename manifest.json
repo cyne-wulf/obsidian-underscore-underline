@@ -1,0 +1,10 @@
+{
+	"id": "underline",
+	"name": "Underscore Underline",
+	"version": "0.1.0",
+	"minAppVersion": "1.6.0",
+	"description": "Renders _underscore_ text as underlined instead of italic in all view modes.",
+	"author": "Ashan Devine",
+	"authorUrl": "https://github.com/cyne-wulf",
+	"isDesktopOnly": false
+}
