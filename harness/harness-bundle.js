@@ -14438,11 +14438,11 @@ function buildDecorations(view) {
   const builder = new RangeSetBuilder();
   const { from: vpFrom, to: vpTo } = view.viewport;
   const doc2 = view.state.doc;
-  const codeRanges = [];
+  const skippedRanges = [];
   syntaxTree(view.state).iterate({
     enter(node) {
-      if (/[Cc]ode|[Mm]ath/.test(node.name)) {
-        codeRanges.push({ from: node.from, to: node.to });
+      if (/[Cc]ode|[Mm]ath|[Ll]ink|[Uu]rl/.test(node.name)) {
+        skippedRanges.push({ from: node.from, to: node.to });
       }
     }
   });
@@ -14451,7 +14451,7 @@ function buildDecorations(view) {
     const line = doc2.lineAt(pos);
     const lineText = line.text;
     let sanitizedLineText = lineText;
-    for (const r of codeRanges) {
+    for (const r of skippedRanges) {
       if (r.to > line.from && r.from < line.to) {
         const start = Math.max(0, r.from - line.from);
         const end = Math.min(lineText.length, r.to - line.from);

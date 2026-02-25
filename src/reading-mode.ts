@@ -38,7 +38,10 @@ function getUnderscoreTexts(
 		.replace(/```[\s\S]*?```/g, (m) => m.replace(/_/g, "\0"))
 		.replace(/`[^`]*?`/g, (m) => m.replace(/_/g, "\0"))
 		.replace(/\$\$[\s\S]*?\$\$/g, (m) => m.replace(/_/g, "\0"))
-		.replace(/\$[^$\n]*?\$/g, (m) => m.replace(/_/g, "\0"));
+		.replace(/\$[^$\n]*?\$/g, (m) => m.replace(/_/g, "\0"))
+		.replace(/\[\[[\s\S]*?\]\]/g, (m) => m.replace(/_/g, "\0")) // internal links
+		.replace(/\[[\s\S]*?\]\([\s\S]*?\)/g, (m) => m.replace(/_/g, "\0")) // external links
+		.replace(/https?:\/\/[^\s]+/g, (m) => m.replace(/_/g, "\0")); // bare URLs
 
 	const underscoreTexts = new Set<string>();
 	let match: RegExpExecArray | null;

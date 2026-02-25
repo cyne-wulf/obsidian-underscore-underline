@@ -31,13 +31,13 @@ function buildDecorations(view: EditorView): DecorationSet {
 	const { from: vpFrom, to: vpTo } = view.viewport;
 	const doc = view.state.doc;
 
-	// Collect code/inline-code/math ranges to skip decoration inside them.
+	// Collect code/inline-code/math/link ranges to skip decoration inside them.
 	// We still use the syntax tree here because node names are consistent.
-	const codeRanges: Array<{ from: number; to: number }> = [];
+	const skippedRanges: Array<{ from: number; to: number }> = [];
 	syntaxTree(view.state).iterate({
 		enter(node: SyntaxNodeRef) {
-			if (/[Cc]ode|[Mm]ath/.test(node.name)) {
-				codeRanges.push({ from: node.from, to: node.to });
+			if (/[Cc]ode|[Mm]ath|[Ll]ink|[Uu]rl/.test(node.name)) {
+				skippedRanges.push({ from: node.from, to: node.to });
 			}
 		},
 	});
@@ -54,9 +54,9 @@ function buildDecorations(view: EditorView): DecorationSet {
 		const line = doc.lineAt(pos);
 		const lineText = line.text;
 		
-		// Blank out code and math ranges so their internal underscores don't break regex pairing
+		// Blank out skipped ranges (code, math, links) so their internal underscores don't break regex pairing
 		let sanitizedLineText = lineText;
-		for (const r of codeRanges) {
+		for (const r of skippedRanges) {
 			if (r.to > line.from && r.from < line.to) {
 				const start = Math.max(0, r.from - line.from);
 				const end = Math.min(lineText.length, r.to - line.from);
