@@ -2,7 +2,7 @@
 
 An Obsidian plugin that changes the behavior of the `_` (underscore) styling to render text as underlined instead of italic. 
 
-Does the strict `**bold**` and `*italic*` implementation in standard markdown environments bother you? You're not alone. This plugin makes the `_` markdown toggle explicitly underline text across all views without disrupting native editing experiences!
+Does the `**bold**` and `*italic*` implementation cover all your bold and italics need?. Why duplicate the functionality for underscores? This plugin makes the `_` character underline text across all views without disrupting native editing experiences!
 
 ## Features
 - **Live Preview Support**: Native `_text_` markup will underline your text in the Live Preview editor organically, hiding marks correctly when the user is not actively editing the line.
